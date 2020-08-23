@@ -1,29 +1,57 @@
+const testFiles = [
+  "**/__tests__/*.{j,t}s?(x)",
+  "**/tests/unit/**/*.spec.{j,t}s?(x)"
+];
+
 module.exports = {
   root: true,
   env: {
-    node: true,
+    node: true
   },
   extends: [
-    'plugin:vue/vue3-essential',
-    '@vue/airbnb',
-    '@vue/typescript/recommended',
+    "plugin:vue/recommended",
+    "@vue/standard",
+    "@vue/typescript/recommended"
   ],
   parserOptions: {
-    ecmaVersion: 2020,
+    ecmaVersion: 2020
   },
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
+    "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+    semi: [
+      "warn",
+      "always"
+    ],
+    quotes: [
+      "warn",
+      "double"
+    ],
+    "lines-between-class-members": [
+      "warn",
+      "always",
+      {
+        exceptAfterSingleLine: true
+      }
+    ],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        devDependencies: [...testFiles, "webpack.config.js"],
+        optionalDependencies: false,
+        peerDependencies: false,
+        bundledDependencies: false
+      }
+    ],
+    // It's allowed to have more than one element in the template root in Vue 3
+    "vue/no-multiple-template-root": "off"
   },
   overrides: [
     {
-      files: [
-        '**/__tests__/*.{j,t}s?(x)',
-        '**/tests/unit/**/*.spec.{j,t}s?(x)',
-      ],
+      files: testFiles,
       env: {
-        jest: true,
-      },
-    },
-  ],
+        jest: true
+      }
+    }
+  ]
 };
