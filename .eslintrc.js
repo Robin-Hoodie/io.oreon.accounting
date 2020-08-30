@@ -3,6 +3,8 @@ const testFiles = [
   "**/tests/unit/**/*.spec.{j,t}s?(x)"
 ];
 
+const vueConfigFile = "vue.config.js";
+
 module.exports = {
   root: true,
   env: {
@@ -37,7 +39,7 @@ module.exports = {
     "import/no-extraneous-dependencies": [
       "error",
       {
-        devDependencies: [...testFiles, "webpack.config.js"],
+        devDependencies: [...testFiles, vueConfigFile],
         optionalDependencies: false,
         peerDependencies: false,
         bundledDependencies: false
@@ -45,12 +47,19 @@ module.exports = {
     ],
     // It's allowed to have more than one element in the template root in Vue 3
     "vue/no-multiple-template-root": "off"
+    // "@typescript"
   },
   overrides: [
     {
       files: testFiles,
       env: {
         jest: true
+      }
+    },
+    {
+      files: [vueConfigFile],
+      rules: {
+        "@typescript-eslint/no-var-requires": "off"
       }
     }
   ]
