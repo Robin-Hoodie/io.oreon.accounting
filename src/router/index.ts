@@ -1,19 +1,21 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import Invoice from "@/views/Invoice.vue";
+import InvoiceList from "@/views/ViewInvoiceList.vue";
 
 const ROUTE_NAMES = {
-  invoice: "invoice"
+  INVOICE_LIST: "INVOICE_LIST"
 };
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/invoice",
-    name: ROUTE_NAMES.invoice,
-    component: Invoice
+    path: "/invoices",
+    name: ROUTE_NAMES.INVOICE_LIST,
+    component: InvoiceList
   },
   {
     path: "/",
-    redirect: "/invoice"
+    redirect: {
+      name: ROUTE_NAMES.INVOICE_LIST
+    }
   }
 ];
 
