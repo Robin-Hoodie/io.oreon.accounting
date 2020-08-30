@@ -1,7 +1,14 @@
 export class Invoice {
   // TODO: Should not have to use this?
   // eslint-disable-next-line no-useless-constructor
-  public constructor (readonly number: number, readonly invoiceDate: Date, readonly dueDate: Date, readonly supplier: string, readonly amount: number, readonly currency: Currency, readonly description?: string) {}
+  public constructor (readonly number: number,
+                      readonly invoiceDate: Date,
+                      readonly dueDate: Date,
+                      readonly supplier: string,
+                      readonly amount: number,
+                      readonly currency: Currency,
+                      readonly filename: string,
+                      readonly description?: string) {}
 
   get price () {
     if (this.currency.suffixed) {

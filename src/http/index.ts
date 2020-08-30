@@ -17,8 +17,8 @@ const getRandomDate = () => new Date(getRandomYear(), getRandomMonth(), getRando
 
 export const getInvoices = async (): Promise<Invoice[]> => {
   return http.get<Invoice[]>([
-    new Invoice(20001, getRandomDate(), getRandomDate(), "SD Worx", 87.00, Currency.EUR, "Beheer loon en BVH Juli 2020"),
-    new Invoice(20002, getRandomDate(), getRandomDate(), "Coolblue", 210.00, Currency.EUR, "Macbook Pro 2020"),
-    new Invoice(20003, getRandomDate(), getRandomDate(), "bol.com", 300.00, Currency.USD)
+    new Invoice(20001, getRandomDate(), getRandomDate(), "SD Worx", 87.00, Currency.EUR, "juli-2020.pdf", "Beheer loon en BVH Juli 2020"),
+    new Invoice(20002, getRandomDate(), getRandomDate(), "Coolblue", 210.00, Currency.EUR, "macbook.pdf", "Macbook Pro 2020"),
+    new Invoice(20003, getRandomDate(), getRandomDate(), "bol.com", 300.00, Currency.USD, "monitor.pdf")
   ]);
 };

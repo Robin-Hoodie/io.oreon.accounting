@@ -3,16 +3,19 @@
     <li
       v-for="invoice of invoices"
       :key="invoice.number"
-      class="invoice-list-item"
+      class="invoice-list-card"
     >
-      <div class="invoice-number">
-        {{ invoice.number }}
+      <div class="invoice-top">
+        <div class="invoice-number">
+          {{ invoice.number }}
+        </div>
+        <div class="invoice-price">
+          {{ invoice.price }}
+        </div>
       </div>
-      <div class="invoice-supplier">
-        {{ invoice.supplier }}
-      </div>
-      <div>
-        <span class="invoice-price">{{ invoice.price }}</span>
+      <div />
+      <div class="invoice-description">
+        <span class="invoice-supplier">{{ invoice.supplier }}</span>
         &nbsp;
         <span>{{ invoice.description }}</span>
       </div>
@@ -38,29 +41,37 @@ export default {
   lang="sass"
   scoped
 >
-$distance-from-side: 4px
-
 .invoice-list
+  width: 100%
   list-style-type: none
+  padding-left: 0
+  display: grid
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))
+  gap: 1rem
 
-.invoice-list-item
+.invoice-list-card
   border: 1px solid black
-  margin: 0.5rem 0
-  padding: 2rem
-  position: relative
+  padding: 1rem
+  box-shadow: 4px 4px 2px 2px #ddd
+  transition: transform 300ms ease-in-out
+  cursor: pointer
+  &:hover
+    transform: scale(1.03)
+
+.invoice-top
+  display: flex
+  justify-content: space-between
 
 .invoice-number
-  position: absolute
   font-weight: bold
   font-size: 0.8rem
-  top: $distance-from-side
-  left: $distance-from-side
 
 .invoice-supplier
-  position: absolute
   font-weight: bold
-  top: $distance-from-side
-  right: $distance-from-side
+
+.invoice-description
+  display: flex
+  justify-content: space-between
 
 .invoice-price
   font-size: 0.95rem

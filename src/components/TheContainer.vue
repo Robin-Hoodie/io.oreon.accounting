@@ -8,7 +8,6 @@
         Loading...
       </template>
     </Suspense>
-    <router-view />
   </section>
 </template>
 
@@ -24,4 +23,7 @@ export default {
 >
 .container
   max-width: 80%
+  display: flex
+  justify-content: center
+  margin: 0 auto
 </style>

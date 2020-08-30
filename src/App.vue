@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app-container">
     <TheContainer />
   </div>
 </template>
@@ -16,14 +16,11 @@ export default {
 </script>
 
 <style lang="sass">
-#app
-  display: flex
-  justify-content: center
+#app-container
   font-family: Avenir, Helvetica, Arial, sans-serif
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
   text-align: center
-  color: #2c3e50
   width: 100vw
 
 </style>
