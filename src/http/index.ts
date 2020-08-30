@@ -1,9 +1,12 @@
-import type { Invoice } from "@/model/invoice";
+import { Invoice, Currency } from "@/model/invoice";
 
 export const http = {
   // Mimic API call
-  get<T extends object> (data: T): Promise<T> {
-    return new Promise(resolve => setTimeout(() => resolve(data), Math.random() * 1000 + 1000));
+  get<T extends object> (data: T, withTimeout = false): Promise<T> {
+    if (withTimeout) {
+      return new Promise(resolve => setTimeout(() => resolve(data), Math.random() * 1000 + 1000));
+    }
+    return Promise.resolve(data);
   }
 };
 
@@ -12,25 +15,10 @@ const getRandomMonth = () => Math.round(Math.random() * 11);
 const getRandomDay = () => Math.round(Math.random() * 28);
 const getRandomDate = () => new Date(getRandomYear(), getRandomMonth(), getRandomDay());
 
-export const getInvoices = async () => {
-  return http.get([
-    {
-      number: 20001,
-      invoiceDate: getRandomDate(),
-      dueDate: getRandomDate(),
-      supplier: "SD Worx"
-    },
-    {
-      number: 20002,
-      invoiceDate: getRandomDate(),
-      dueDate: getRandomDate(),
-      supplier: "Coolblue"
-    },
-    {
-      number: 20003,
-      invoiceDate: getRandomDate(),
-      dueDate: getRandomDate(),
-      supplier: "bol.com"
-    }
+export const getInvoices = async (): Promise<Invoice[]> => {
+  return http.get<Invoice[]>([
+    new Invoice(20001, getRandomDate(), getRandomDate(), "SD Worx", 87.00, Currency.EUR, "Beheer loon en BVH Juli 2020"),
+    new Invoice(20002, getRandomDate(), getRandomDate(), "Coolblue", 210.00, Currency.EUR, "Macbook Pro 2020"),
+    new Invoice(20003, getRandomDate(), getRandomDate(), "bol.com", 300.00, Currency.USD)
   ]);
 };

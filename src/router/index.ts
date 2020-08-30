@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import InvoiceList from "@/views/ViewInvoiceList.vue";
+import ViewInvoiceList from "@/views/ViewInvoiceList.vue";
 
 const ROUTE_NAMES = {
   INVOICE_LIST: "INVOICE_LIST"
@@ -9,7 +9,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/invoices",
     name: ROUTE_NAMES.INVOICE_LIST,
-    component: InvoiceList
+    component: ViewInvoiceList
   },
   {
     path: "/",
