@@ -29,9 +29,8 @@ import { getInvoices } from "@/http";
 export default {
   name: "ViewInvoiceList",
   async setup () {
-    const invoices = await getInvoices();
     return {
-      invoices
+      invoices: await getInvoices()
     };
   }
 };
