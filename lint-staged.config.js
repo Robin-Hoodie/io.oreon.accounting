@@ -1,5 +1,5 @@
 module.exports = {
-  "*.{js,jsx,vue,ts,tsx}": [
+  "*.{js,vue,ts}": [
     "yarn --cwd projects/client lint"
   ]
 };

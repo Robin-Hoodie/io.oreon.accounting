@@ -9,7 +9,11 @@
     "client:start": "yarn --cwd projects/client start",
     "client:build": "yarn --cwd projects/client build",
     "client:test:unit": "yarn --cwd projects/client test:unit",
-    "client:lint": "yarn --cwd projects/client lint"
+    "client:lint": "yarn --cwd projects/client lint",
+    "server:start": "yarn --cwd projects/server/functions start",
+    "server:build": "yarn --cwd projects/server/functions build",
+    "server:serve": "yarn --cwd projects/server/functions serve",
+    "server:deploy": "yarn --cwd projects/server/functions deploy"
   },
   "devDependencies": {
     "@types/jest": "^24.0.19",
@@ -30,7 +34,8 @@
     "sass-loader": "^8.0.2",
     "typescript": "~3.9.3",
     "vue-jest": "^5.0.0-0",
-    "webpack-bundle-analyzer": "^3.8.0"
+    "webpack-bundle-analyzer": "^3.8.0",
+    "firebase-functions-test": "^0.2.0"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"

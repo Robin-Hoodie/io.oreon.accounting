@@ -47,7 +47,6 @@ module.exports = {
     ],
     // It's allowed to have more than one element in the template root in Vue 3
     "vue/no-multiple-template-root": "off"
-    // "@typescript"
   },
   overrides: [
     {
