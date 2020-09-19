@@ -1,0 +1,3 @@
+extends:
+  - oreon
+  - plugin:@typescript-eslint/recommended

@@ -10,7 +10,7 @@ export class Invoice {
                       readonly filename: string,
                       readonly description?: string) {}
 
-  get price () {
+  get price (): string {
     if (this.currency.suffixed) {
       return `${this.amount.toFixed(2)}${this.currency.symbol}`;
     }
@@ -25,5 +25,7 @@ export class Currency {
 
   // TODO: Should not have to use this?
   // eslint-disable-next-line no-useless-constructor
-  private constructor (private readonly key: string, public readonly symbol: string, public readonly suffixed = false) {}
+  private constructor (private readonly key: string,
+                       public readonly symbol: string,
+                       public readonly suffixed = false) {}
 }

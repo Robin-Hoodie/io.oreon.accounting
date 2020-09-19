@@ -1,10 +1,11 @@
-import { Invoice, Currency } from "@/model/invoice";
+import {Invoice, Currency} from "@/model/invoice";
 
 export const http = {
   // Mimic API call
-  get<T extends object> (data: T, withTimeout = false): Promise<T> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  get<T extends any> (data: T, withTimeout = false): Promise<T> {
     if (withTimeout) {
-      return new Promise(resolve => setTimeout(() => resolve(data), Math.random() * 1000 + 1000));
+      return new Promise((resolve) => setTimeout(() => resolve(data), Math.random() * 1000 + 1000));
     }
     return Promise.resolve(data);
   }
@@ -17,8 +18,27 @@ const getRandomDate = () => new Date(getRandomYear(), getRandomMonth(), getRando
 
 export const getInvoices = async (): Promise<Invoice[]> => {
   return http.get<Invoice[]>([
-    new Invoice(20001, getRandomDate(), getRandomDate(), "SD Worx", 87.00, Currency.EUR, "juli-2020.pdf", "Beheer loon en BVH Juli 2020"),
-    new Invoice(20002, getRandomDate(), getRandomDate(), "Coolblue", 210.00, Currency.EUR, "macbook.pdf", "Macbook Pro 2020"),
-    new Invoice(20003, getRandomDate(), getRandomDate(), "bol.com", 300.00, Currency.USD, "monitor.pdf")
+    new Invoice(20001,
+        getRandomDate(),
+        getRandomDate(),
+        "SD Worx"
+        , 87.00,
+        Currency.EUR,
+        "juli-2020.pdf",
+        "Beheer loon en BVH Juli 2020"),
+    new Invoice(20002,
+        getRandomDate(),
+        getRandomDate(),
+        "Coolblue",
+        210.00, Currency.EUR,
+        "macbook.pdf",
+        "Macbook Pro 2020"),
+    new Invoice(20003,
+        getRandomDate(),
+        getRandomDate(),
+        "bol.com",
+        300.00,
+        Currency.USD,
+        "monitor.pdf")
   ]);
 };

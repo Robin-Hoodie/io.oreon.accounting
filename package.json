@@ -13,34 +13,36 @@
     "server:start": "yarn --cwd projects/server/functions start",
     "server:build": "yarn --cwd projects/server/functions build",
     "server:serve": "yarn --cwd projects/server/functions serve",
-    "server:deploy": "yarn --cwd projects/server/functions deploy"
+    "server:deploy": "yarn --cwd projects/server/functions deploy",
+    "server:lint": "yarn --cwd projects/server lint"
   },
   "devDependencies": {
     "@types/jest": "^24.0.19",
-    "@typescript-eslint/eslint-plugin": "^2.33.0",
-    "@typescript-eslint/parser": "^2.33.0",
+    "@typescript-eslint/eslint-plugin": "^4.1.1",
+    "@typescript-eslint/parser": "^4.1.1",
     "@vue/compiler-sfc": "^3.0.0-0",
     "@vue/eslint-config-standard": "^5.1.2",
     "@vue/eslint-config-typescript": "^5.0.2",
     "@vue/test-utils": "^2.0.0-0",
     "eslint": "^6.7.2",
+    "eslint-config-oreon": "^1.0.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^7.0.0-0",
-    "lint-staged": "^9.5.0",
+    "firebase-functions-test": "^0.2.0",
+    "lint-staged": "^10.4.0",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
     "typescript": "~3.9.3",
     "vue-jest": "^5.0.0-0",
-    "webpack-bundle-analyzer": "^3.8.0",
-    "firebase-functions-test": "^0.2.0"
-  },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
+    "webpack-bundle-analyzer": "^3.8.0"
   },
   "workspaces": [
     "projects/*"
-  ]
+  ],
+  "gitHooks": {
+    "pre-commit": "yarn client:lint && yarn server:lint"
+  }
 }

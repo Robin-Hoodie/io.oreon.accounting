@@ -4,9 +4,9 @@ const inDevelopment = process.env.NODE_ENV === "development";
 
 module.exports = {
   lintOnSave: inDevelopment,
-  chainWebpack: config => {
+  chainWebpack: (config) => {
     config.plugin("html")
-      .tap(args => {
+      .tap((args) => {
         return [{
           ...args[0],
           title: "Oreon Accounting"

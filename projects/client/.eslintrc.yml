@@ -1,0 +1,9 @@
+extends:
+  - oreon
+  - plugin:vue/vue3-recommended
+  - "@vue/typescript/recommended"
+overrides:
+  - files:
+      - vue.config.js
+    rules:
+      "@typescript-eslint/no-var-requires": off

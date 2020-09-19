@@ -25,10 +25,11 @@
 
 <script lang="ts">
 import { getInvoices } from "@/http";
+import type { Invoice } from "@/model/invoice";
 
 export default {
   name: "ViewInvoiceList",
-  async setup () {
+  async setup (): { invoices: Invoice[] } {
     return {
       invoices: await getInvoices()
     };
@@ -54,6 +55,7 @@ export default {
   box-shadow: 4px 4px 2px 2px #ddd
   transition: transform 300ms ease-in-out
   cursor: pointer
+
   &:hover
     transform: scale(1.03)
 

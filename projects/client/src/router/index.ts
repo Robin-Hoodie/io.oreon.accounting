@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import {createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import ViewInvoiceList from "@/views/ViewInvoiceList.vue";
 
 const ROUTE_NAMES = {
