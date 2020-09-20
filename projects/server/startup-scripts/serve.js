@@ -3,7 +3,7 @@ const { typescriptCommand, defaultOptions, successCb, errorCb } = require("./com
 
 concurrently([
   {
-    command: "firebase emulators:start --only functions",
+    command: "firebase emulators:start --only functions,firestore",
     name: "firebase",
     prefixColor: "red"
   },
