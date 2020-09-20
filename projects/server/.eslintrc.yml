@@ -1,3 +1,8 @@
 extends:
   - oreon
   - plugin:@typescript-eslint/recommended
+overrides:
+  - files:
+      - startup-scripts/*
+    rules:
+      "@typescript-eslint/no-var-requires": off

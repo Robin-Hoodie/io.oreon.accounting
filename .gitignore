@@ -23,3 +23,5 @@ firebase-debug.log
 *.njsproj
 *.sln
 *.sw?
+
+service-account-*.json

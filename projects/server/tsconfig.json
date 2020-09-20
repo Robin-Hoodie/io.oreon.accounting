@@ -1,12 +1,18 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "module": "commonjs",
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "outDir": "dist",
     "sourceMap": true,
     "strict": true,
-    "target": "es2017"
+    "target": "es2017",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
   },
   "compileOnSave": true,
   "include": [
