@@ -9,4 +9,4 @@ admin.initializeApp({
   credential: admin.credential.applicationDefault()
 });
 
-export { syncFilesWithDb } from "./sync-files-with-db";
+export * from "./drive/index";

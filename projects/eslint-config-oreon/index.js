@@ -21,7 +21,7 @@ module.exports = {
       "double"
     ],
     "max-len": ["error", {
-      code: 100,
+      code: 120,
       tabWidth: 2,
       ignoreUrls: true
     }],
