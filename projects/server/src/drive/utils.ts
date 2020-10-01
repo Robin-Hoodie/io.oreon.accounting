@@ -5,6 +5,8 @@ export const USER_ROBIN_EMAIL = "robin@oreon.io";
 
 const BAD_REQUEST = 400;
 const METHOD_NOT_ALLOWED = 405;
+export const YEAR_REGEX = /(?<=\/)20[1-9]\d/;
+export const QUARTER_REGEX = /(?<=\/)Q[1-4]$/;
 
 export const sendJsonResponse = (response: functions.Response<any>, responseObject: any) => {
   response.contentType("application/json")
@@ -23,6 +25,7 @@ export const addParentFolderIdToQuery = (q: string, parentFolderId: string) => {
 export const httpsFunction = (allowedMethods: HttpMethod[],
                               handler: FunctionHandler) => {
   return functions
+    .region(DEFAULT_REGION)
     .https
     .onRequest(async (request, response) => {
       if (!allowedMethods.includes(request.method as HttpMethod)) {

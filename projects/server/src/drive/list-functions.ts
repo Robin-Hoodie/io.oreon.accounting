@@ -3,7 +3,7 @@ import driveService from "./service";
 import {
   sendJsonResponse,
   addParentFolderIdToQuery,
-  sendBadRequestResponse, getFunction
+  sendBadRequestResponse, getFunction, QUARTER_REGEX, YEAR_REGEX
 } from "./utils";
 import { Quarter } from "./types";
 
@@ -19,43 +19,44 @@ export const invoices = getFunction(async (request, response) => {
 
 // GET /invoicesForQuarterForYear/:year/:quarter
 export const invoicesForQuarterForYear = getFunction(async (request, response) => {
-  const quarter = request.path.match(/(?<=\/)Q[1-4]$/)?.[0] as Quarter | undefined;
-  const year = request.path.match(/(?<=\/)\d{4}/)?.[0];
+  const quarter = request.path.match(QUARTER_REGEX)?.[0] as Quarter | undefined;
+  const year = request.path.match(YEAR_REGEX)?.[0];
   if (quarter && year) {
     sendJsonResponse(response, await listPdfsInQuarterInYear(quarter, year));
   }
-  let errorMessage = "URL is missing path parameter(s)";
+  const errorMessage = "URL has missing/invalid path parameter(s). " +
+    "Please use the following format: /invoicesForQuarterForYear/:year/:quarter where 'year'" +
+    "should be a number from 2010 to 2099 and 'quarter' should be one of 'Q1', 'Q2', 'Q3' or 'Q4'";
+  let invalidPathParams: string[] = [];
   if (!quarter) {
-    errorMessage += " 'quarter'";
+    invalidPathParams = [...invalidPathParams, "quarter"];
   }
   if (!year) {
-    if (!quarter) {
-      errorMessage += " and";
-    }
-    errorMessage += " 'year'";
+    invalidPathParams = [...invalidPathParams, "year"];
   }
-  errorMessage += ". Please use the following format: /invoicesForQuarterForYear/:year/:quarter";
   sendBadRequestResponse(response, {
-    errorMessage
+    errorMessage,
+    invalidPathParams
   });
 });
 
 // GET /folders?parentFolderId
 export const folders = getFunction(async (request, response) => {
-    const { parentFolderId } = request.query as { parentFolderId?: string };
-    sendJsonResponse(response, await listDriveFolders(parentFolderId));
-  });
+  const { parentFolderId } = request.query as { parentFolderId?: string };
+  sendJsonResponse(response, await listDriveFolders(parentFolderId));
+});
 
 // GET /foldersForYear/:year
 export const foldersForYear = getFunction(async (request, response) => {
-    const year = request.path.match(/(?<=\/)\d{4}/)?.[0];
-    if (year) {
-      sendJsonResponse(response, await listDriveFoldersForYear(year));
-    }
-    sendBadRequestResponse(response, {
-      errorMessage: "URL is missing path parameter 'year'. Please use the following format: /foldersForYear/:year"
-    });
+  const year = request.path.match(YEAR_REGEX)?.[0];
+  if (year) {
+    sendJsonResponse(response, await listDriveFoldersForYear(year));
+  }
+  sendBadRequestResponse(response, {
+    errorMessage: "URL is missing path parameter 'year'. " +
+      "Please use the following format: /foldersForYear/:year where 'year' should be a number from 2010 to 2099"
   });
+});
 
 const listDriveFolders = async (parentFolderId?: string): Promise<Schema$File> => {
   let q = "mimeType='application/vnd.google-apps.folder'";
@@ -107,7 +108,7 @@ const listPdfsInFolder = async (parentFolderId?: string): Promise<Schema$File[]>
   return files;
 };
 
-const listPdfsInQuarterInYear = async (quarter: Quarter, year: string): Promise<Schema$File[]> => {
+const listPdfsInQuarterInYear = async (quarter: Quarter, year: string) => {
   const quarterFolders = await listDriveFoldersForYear(year);
   const quarterFolder: Schema$File & { id: string } = quarterFolders.find(quarterFolder => {
     const quarterFromFolder = quarterFolder.name?.match(/Q\d/)?.[0];
