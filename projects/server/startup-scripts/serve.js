@@ -1,11 +1,11 @@
 const concurrently = require("concurrently");
-const { typescriptCommand, defaultOptions, successCb, errorCb } = require("./common");
+const { typescriptCommand, defaultOptions } = require("./common");
 
 const serve = async () => {
   try {
     await concurrently([
       {
-        command: "firebase emulators:start --only functions,firestore",
+        command: "NODE_ENV=development firebase emulators:start --only functions,firestore",
         name: "firebase",
         prefixColor: "red"
       },

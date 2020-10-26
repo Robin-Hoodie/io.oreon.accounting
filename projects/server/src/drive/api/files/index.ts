@@ -1,32 +1,32 @@
 import * as functions from "firebase-functions";
 import Busboy from "busboy";
 import { DEFAULT_REGION } from "../../utils";
-import getConfiguredExpressApp from "../../../server";
-import { deleteFile as deleteFileFromService } from "../../service/drive-service-delete";
+import getConfiguredRouterAndApp from "../../../server";
+import { deleteFileOrFolder as deleteFileFromService } from "../../service/drive-service-delete";
 import { listPdfsInFolder, listPdfsInQuarterInYear } from "../../service/drive-service-list";
 import { Quarter } from "../../types";
 import { uploadInvoice } from "../../service/drive-service-create";
 
-const app = getConfiguredExpressApp();
+const { router, app } = getConfiguredRouterAndApp("invoices-incoming");
 
-app.delete("/invoices-incoming/:id", async (request, response) => {
+router.delete("/:id", async (request, response) => {
   const id = request.params.id;
   await deleteFileFromService(id);
   // TODO: add deleted file info
   response.end();
 });
 
-app.get("/invoices-incoming/", async (request, response) => {
+router.get("/", async (request, response) => {
   const { parentFolderId } = request.params as { parentFolderId?: string };
   response.json(await listPdfsInFolder(parentFolderId));
 });
 
-app.get("/invoices-incoming/:year/:quarter", async (request, response) => {
+router.get("/:year/:quarter", async (request, response) => {
   const { quarter, year } = request.params;
   response.json(await listPdfsInQuarterInYear(quarter as Quarter, year));
 });
 
-app.post("/invoices-incoming/:year/:quarter", async (request, response) => {
+router.post("/:year/:quarter", async (request, response) => {
   const { quarter, year } = request.params as { quarter: Quarter, year: string };
   const busboy = new Busboy({
     headers: request.headers,

@@ -5,19 +5,19 @@ import { Quarter } from "../types";
 export const deleteYearFolder = async (year: string): Promise<void> => {
   const yearFolder = await getYearFolder(year);
   if (yearFolder) {
-    await deleteFile(yearFolder.id);
+    await deleteFileOrFolder(yearFolder.id);
   }
 };
 
 export const deleteQuarterFolder = async (year: string, quarter: Quarter) => {
   const quarterFolder = await getQuarterForYearFolder(year, quarter);
   if (quarterFolder) {
-    await deleteFile(quarterFolder.id);
+    await deleteFileOrFolder(quarterFolder.id);
   }
 };
 
-export const deleteFile = async (id: string) => {
+export const deleteFileOrFolder = async (id: string) => {
   await driveService.files.delete({
     fileId: id
-  })
+  });
 }
