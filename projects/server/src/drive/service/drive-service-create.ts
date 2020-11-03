@@ -7,6 +7,7 @@ import {
   MIME_TYPE_FOLDER
 } from "./drive-service-constants";
 import { DOMAIN_OREON, USER_ROBIN_EMAIL } from "../utils";
+import { Readable } from "stream";
 
 export const addQuarterFolderForYear = async (year: string, quarter: Quarter): Promise<SchemaFileWithDefaultFields> => {
   if (await quarterForYearFolderExists(year, quarter)) {
@@ -62,10 +63,9 @@ export const setDefaultPermissions = async (folderId: string): Promise<void> => 
 /// TODO: What if quarter/year folder does not exist?
 // TODO: Add parent folder in request
 export const uploadInvoice =
-  async (year: string, quarter: Quarter, file: NodeJS.ReadableStream, fileName: string, mimeType: string):
+  async (year: string, quarter: Quarter, buffer: Buffer, fileName: string, mimeType: string):
     Promise<SchemaFileWithDefaultFields> => {
     const parentFolder = await getQuarterForYearFolder(year, quarter);
-    console.log("parentFolder for year and quarter", year, quarter, parentFolder?.name);
     const { data: uploadedInvoice } = await driveService.files.create({
       requestBody: {
         name: fileName,
@@ -73,7 +73,7 @@ export const uploadInvoice =
       },
       media: {
         mimeType,
-        body: file
+        body: Readable.from(buffer)
       }
     }) as { data: SchemaFileWithDefaultFields };
     await setDefaultPermissions(uploadedInvoice.id);

@@ -34,25 +34,33 @@ router.post("/:year/:quarter", async (request, response) => {
 // router.delete(/\\/\d{4}/, async (request, response) => {
 //   const { year } = request.params;
 //   await deleteYearFolder(year);
-//   // TODO: Add deleted folder details in response
 //   response.end();
 // });
 
 router.delete("/:year/:quarter", async (request, response) => {
   const { year, quarter } = request.params as { year: string, quarter: Quarter };
-  await deleteQuarterFolder(year, quarter);
-  // TODO: Add deleted folder details in response
-  response.end();
+  try {
+    await deleteQuarterFolder(year, quarter);
+  } catch (error) {
+    response.status(error.code).json({
+      message: error.message,
+      errors: error.errors
+    });
+  }
+  response.status(204).end();
 });
 
 router.delete("/:id", async (request, response) => {
   const { id } = request.params as { id: string };
   try {
     await deleteFileOrFolder(id);
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    response.status(error.code).json({
+      message: error.message,
+      errors: error.errors
+    });
   }
-  response.end();
+  response.status(204).end();
 });
 
 export const folders = functions

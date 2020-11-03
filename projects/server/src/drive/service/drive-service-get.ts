@@ -21,6 +21,7 @@ export const getYearFolder = async (year: string): Promise<SchemaFileWithDefault
   return;
 };
 
+// TODO: Rethrow error if not found
 export const getQuarterForYearFolder =
   async (year: string, quarter: Quarter): Promise<SchemaFileWithDefaultFields | undefined> => {
     const yearFolder = await getYearFolder(year);
