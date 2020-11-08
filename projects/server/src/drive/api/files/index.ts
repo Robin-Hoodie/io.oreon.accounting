@@ -5,7 +5,7 @@ import { deleteFileOrFolder as deleteFileFromService } from "../../service/drive
 import { listPdfsInFolder, listPdfsInQuarterInYear } from "../../service/drive-service-list";
 import { Quarter, SchemaFileWithDefaultFields } from "../../types";
 import { uploadInvoice } from "../../service/drive-service-create";
-import { UploadedFiles } from "../../../middleware";
+import { UploadedFiles } from "../../../middleware/file-upload";
 
 const { router, app } = getConfiguredRouterAndApp("invoices-incoming");
 

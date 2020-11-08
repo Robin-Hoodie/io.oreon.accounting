@@ -4,6 +4,7 @@ import { Quarter } from "../types";
 
 export const deleteYearFolder = async (year: string): Promise<void> => {
   const yearFolder = await getYearFolder(year);
+  // TODO: Handle year folder not found
   await deleteFileOrFolder(yearFolder!.id);
 };
 

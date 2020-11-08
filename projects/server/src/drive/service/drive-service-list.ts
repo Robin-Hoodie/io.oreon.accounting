@@ -14,12 +14,8 @@ export const listDriveFolders = async (parentFolderId?: string): Promise<SchemaF
   return driveFolders.files;
 };
 
-export const listYearFolders = async (): Promise<SchemaFileWithDefaultFields[]> => {
-  return await listDriveFolders(INCOMING_INVOICES_FOLDER_ID);
-};
-
 export const listDriveFoldersForYear = async (year: string): Promise<SchemaFileWithDefaultFields[]> => {
-  const yearFolders = await listYearFolders();
+  const yearFolders = await listDriveFolders(INCOMING_INVOICES_FOLDER_ID);
   const yearFolder = yearFolders.find(yearFolder => {
     const yearFromFolder = yearFolder.name?.match(/20\d{2}$/)?.[0];
     return yearFromFolder === year;

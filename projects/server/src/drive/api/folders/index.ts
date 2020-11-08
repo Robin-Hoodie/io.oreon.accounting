@@ -1,6 +1,6 @@
 import { addQuarterFolderForYear } from "../../service/drive-service-create";
-import { getQuarterForYearFolder } from "../../service/drive-service-get";
-import { deleteFileOrFolder, deleteQuarterFolder, deleteYearFolder } from "../../service/drive-service-delete";
+import { getQuarterForYearFolder, getYearFolder } from "../../service/drive-service-get";
+import { deleteQuarterFolder, deleteYearFolder } from "../../service/drive-service-delete";
 import type { Quarter } from "../../types";
 import { listDriveFolders, listDriveFoldersForYear } from "../../service/drive-service-list";
 import getConfiguredRouterAndApp from "../../../server";
@@ -10,57 +10,64 @@ import { INCOMING_INVOICES_FOLDER_ID } from "../../service/drive-service-constan
 
 const { router, app } = getConfiguredRouterAndApp("invoices-incoming");
 
+// ----- GET -------
+
 router.get("/", async (request, response) => {
   response.json(await listDriveFolders(INCOMING_INVOICES_FOLDER_ID));
 });
 
 router.get("/:year", async (request, response) => {
   const { year } = request.params;
-  response.json(await listDriveFoldersForYear(year));
+  try {
+    const yearFolder = await getYearFolder(year);
+    response.json(yearFolder);
+  } catch (error) {
+    response.handleError(error);
+  }
 });
 
 router.get("/:year/:quarter", async (request, response) => {
   const { year, quarter } = request.params as { year: string, quarter: Quarter };
-  const quarterFolderForYear = await getQuarterForYearFolder(year, quarter);
-  response.json(quarterFolderForYear);
+  try {
+    const quarterFolderForYear = await getQuarterForYearFolder(year, quarter);
+    response.json(quarterFolderForYear);
+  } catch (error) {
+    response.handleError(error);
+  }
 });
+
+// ----- POST -------
 
 router.post("/:year/:quarter", async (request, response) => {
   const { year, quarter } = request.params;
-  const createdQuarterFolder = await addQuarterFolderForYear(year, quarter as Quarter);
-  response.status(201).json(createdQuarterFolder);
+  try {
+    const createdQuarterFolder = await addQuarterFolderForYear(year, quarter as Quarter);
+    response.status(201).json(createdQuarterFolder);
+  } catch (error) {
+    response.handleError(error);
+  }
 });
 
-// router.delete(/\\/\d{4}/, async (request, response) => {
-//   const { year } = request.params;
-//   await deleteYearFolder(year);
-//   response.end();
-// });
+// ----- DELETE -------
+
+router.delete("/:year", async (request, response) => {
+  const { year } = request.params;
+  try {
+    await deleteYearFolder(year);
+    response.status(204).end();
+  } catch (error) {
+    response.handleError(error);
+  }
+});
 
 router.delete("/:year/:quarter", async (request, response) => {
   const { year, quarter } = request.params as { year: string, quarter: Quarter };
   try {
     await deleteQuarterFolder(year, quarter);
+    response.status(204).end();
   } catch (error) {
-    response.status(error.code).json({
-      message: error.message,
-      errors: error.errors
-    });
+    response.handleError(error);
   }
-  response.status(204).end();
-});
-
-router.delete("/:id", async (request, response) => {
-  const { id } = request.params as { id: string };
-  try {
-    await deleteFileOrFolder(id);
-  } catch (error) {
-    response.status(error.code).json({
-      message: error.message,
-      errors: error.errors
-    });
-  }
-  response.status(204).end();
 });
 
 export const folders = functions

@@ -8,10 +8,11 @@ import {
 } from "./drive-service-constants";
 import { DOMAIN_OREON, USER_ROBIN_EMAIL } from "../utils";
 import { Readable } from "stream";
+import { ServiceError } from "./service-error";
 
 export const addQuarterFolderForYear = async (year: string, quarter: Quarter): Promise<SchemaFileWithDefaultFields> => {
   if (await quarterForYearFolderExists(year, quarter)) {
-    throw new Error(`Folder for ${quarter} in ${year} already exists!`);
+    throw new ServiceError(`Folder for ${quarter} in ${year} already exists`, 400);
   }
   let yearFolder = await getYearFolder(year);
   if (!yearFolder) {
