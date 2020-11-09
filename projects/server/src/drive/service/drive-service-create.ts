@@ -1,3 +1,4 @@
+import { Params$Resource$Files$Create } from "googleapis/build/src/apis/drive/v3";
 import { getQuarterForYearFolder, getYearFolder, quarterForYearFolderExists } from "./drive-service-get";
 import { Quarter, SchemaFileWithDefaultFields } from "../types";
 import driveService from "../drive-service";
@@ -14,31 +15,43 @@ export const addQuarterFolderForYear = async (year: string, quarter: Quarter): P
   if (await quarterForYearFolderExists(year, quarter)) {
     throw new ServiceError(`Folder for ${quarter} in ${year} already exists`, 400);
   }
-  let yearFolder = await getYearFolder(year);
-  if (!yearFolder) {
-    yearFolder = await addYearFolder(year);
-  }
-  const { data: createdQuarterFolder } = await driveService.files.create({
-    requestBody: {
-      name: `${INCOMING_INVOICES_FOLDER_NAME}_${year}_${quarter}`,
-      parents: [yearFolder.id],
-      mimeType: MIME_TYPE_FOLDER
+  let yearFolder;
+  try {
+    yearFolder = await getYearFolder(year);
+  } catch (error) {
+    if (error.statusCode === 404) {
+      yearFolder = await addYearFolder(year);
+    } else {
+      throw error;
     }
-  }) as { data: SchemaFileWithDefaultFields };
-  await setDefaultPermissions(createdQuarterFolder.id);
-  return createdQuarterFolder;
+  }
+  return await addQuarterFolder(year, quarter, yearFolder.id);
 };
 
 export const addYearFolder = async (year: string): Promise<SchemaFileWithDefaultFields> => {
-  const { data: createdYearFolder } = await driveService.files.create({
-    requestBody: {
-      name: `${INCOMING_INVOICES_FOLDER_NAME}_${year}`,
-      parents: [INCOMING_INVOICES_FOLDER_ID],
-      mimeType: MIME_TYPE_FOLDER
-    }
-  }) as { data: SchemaFileWithDefaultFields };
+  const createdYearFolder = await addFolder(`${INCOMING_INVOICES_FOLDER_NAME}_${year}`, INCOMING_INVOICES_FOLDER_ID);
   await setDefaultPermissions(createdYearFolder.id);
   return createdYearFolder;
+};
+
+export const addQuarterFolder = async (year: string, quarter: Quarter, yearFolderId: string) => {
+  const createdQuarterFolder = await addFolder(`${INCOMING_INVOICES_FOLDER_NAME}_${year}_${quarter}`, yearFolderId);
+  await setDefaultPermissions(createdQuarterFolder.id);
+  return createdQuarterFolder;
+}
+
+export const addFolder = async (name: string, parentFolderId?: string): Promise<SchemaFileWithDefaultFields> => {
+  const requestBody: Params$Resource$Files$Create = {
+    name,
+    mimeType: MIME_TYPE_FOLDER
+  };
+  if (parentFolderId) {
+    requestBody.parents = [parentFolderId];
+  }
+  const { data: createdFolder } = await driveService.files.create({
+    requestBody
+  }) as { data: SchemaFileWithDefaultFields };
+  return createdFolder;
 };
 
 export const setDefaultPermissions = async (folderId: string): Promise<void> => {

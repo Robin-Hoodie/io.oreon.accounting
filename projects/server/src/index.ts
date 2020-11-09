@@ -15,4 +15,3 @@ export {
   folders,
   files
 };
-

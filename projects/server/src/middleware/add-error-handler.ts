@@ -9,9 +9,9 @@ export const addErrorHandler: RequestHandler = (req, res, next) => {
       });
       next();
     } else {
-      res.status(500).json(error);
       next();
     }
+    return res;
   };
   next();
 }

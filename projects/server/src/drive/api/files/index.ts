@@ -1,5 +1,5 @@
 import * as functions from "firebase-functions";
-import { DEFAULT_REGION } from "../../utils";
+import { DEFAULT_REGION, EXPRESS_QUARTER_REGEX, EXPRESS_YEAR_REGEX } from "../../utils";
 import getConfiguredRouterAndApp from "../../../server";
 import { deleteFileOrFolder } from "../../service/drive-service-delete";
 import { listPdfsInFolder, listPdfsInQuarterInYear } from "../../service/drive-service-list";
@@ -20,7 +20,7 @@ router.get("/", async (request, response) => {
   }
 });
 
-router.get("/:year/:quarter", async (request, response) => {
+router.get(`/:year(${EXPRESS_YEAR_REGEX})/:quarter(${EXPRESS_QUARTER_REGEX})`, async (request, response) => {
   const { quarter, year } = request.params;
   try {
     response.json(await listPdfsInQuarterInYear(quarter as Quarter, year));
@@ -31,7 +31,7 @@ router.get("/:year/:quarter", async (request, response) => {
 
 // ----- POST -------
 
-router.post("/:year/:quarter", async (request, response) => {
+router.post(`/:year(${EXPRESS_YEAR_REGEX})/:quarter(${EXPRESS_QUARTER_REGEX})`, async (request, response) => {
   const { quarter, year } = request.params as { quarter: Quarter, year: string };
   const uploadedInvoices: SchemaFileWithDefaultFields[] = [];
   try {

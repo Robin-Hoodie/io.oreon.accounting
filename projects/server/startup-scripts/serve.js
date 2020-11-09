@@ -4,12 +4,12 @@ const { typescriptCommand, defaultOptions } = require("./common");
 const serve = async () => {
   try {
     await concurrently([
+      typescriptCommand,
       {
         command: "NODE_ENV=development firebase emulators:start --only functions,firestore",
         name: "firebase",
         prefixColor: "red"
-      },
-      typescriptCommand
+      }
     ], defaultOptions);
     process.exit();
   } catch (e) {

@@ -3,6 +3,7 @@ import driveService from "../drive-service";
 import { Quarter, SchemaFileWithDefaultFields } from "../types";
 import { MIME_TYPE_FOLDER, MIME_TYPE_PDF, INCOMING_INVOICES_FOLDER_ID } from "./drive-service-constants";
 import { ServiceError } from "./service-error";
+import { deleteFileOrFolder } from "./drive-service-delete";
 
 export const listDriveFolders = async (parentFolderId?: string): Promise<SchemaFileWithDefaultFields[]> => {
   let q = `mimeType='${MIME_TYPE_FOLDER}'`;
@@ -15,7 +16,8 @@ export const listDriveFolders = async (parentFolderId?: string): Promise<SchemaF
   if (driveFolders.files.length) {
     return driveFolders.files;
   }
-  const message = parentFolderId ? `No folders were found in folder with id ${parentFolderId}` : "No folders were found";
+  const message =
+    parentFolderId ? `No folders were found in folder with id ${parentFolderId}` : "No folders were found";
   throw new ServiceError(message, 404);
 };
 

@@ -7,6 +7,16 @@ import { addParentFolderIdToQuery } from "./drive-service-utils";
 import driveService from "../drive-service";
 import { Quarter, SchemaFileWithDefaultFields } from "../types";
 import { ServiceError } from "./service-error";
+import { drive_v3 } from "googleapis";
+import Schema$File = drive_v3.Schema$File;
+
+export const getFolder = async (id: string): Promise<Required<Schema$File>> => {
+  const { data: folder } = await driveService.files.get({ fileId: id, fields: "*" });
+  if (folder) {
+    return folder as Required<Schema$File>;
+  }
+  throw new ServiceError(`No folder with id ${id} was found`, 404);
+};
 
 export const getYearFolder = async (year: string): Promise<SchemaFileWithDefaultFields> => {
   const q =
@@ -41,5 +51,13 @@ export const getQuarterForYearFolder =
   };
 
 export const quarterForYearFolderExists = async (year: string, quarter: Quarter): Promise<boolean> => {
-  return Boolean(await getQuarterForYearFolder(year, quarter));
+  try {
+    await getQuarterForYearFolder(year, quarter)
+    return true;
+  } catch (error) {
+    if (error.statusCode === 404) {
+      return false;
+    }
+    throw error;
+  }
 };

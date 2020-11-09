@@ -1,12 +1,12 @@
 module.exports = {
   typescriptCommand: {
     command: "yarn build:watch",
-    name: "tsc",
+    name: "typescript-watcher",
     prefixColor: "cyan"
   },
   defaultOptions: {
     restartTries: 2,
     restartDelay: 5000,
-    killOthers: ["success", "failure"]
+    killOthers: ["failure"]
   }
 };

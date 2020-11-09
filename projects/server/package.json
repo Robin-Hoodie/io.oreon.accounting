@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "build": "tsc",
-    "build:watch": "tsc --watch",
+    "build:watch": "tsc --watch --incremental",
     "serve": "node startup-scripts/serve.js",
     "shell": "concurrently -k -n \"firebase,tsc\"-c \"red,blue\" --restart-tries 1 --restart-after 3000 --handle-input \"firebase functions:shell\" \"yarn build:watch\"",
     "start": "node startup-scripts/shell.js",
