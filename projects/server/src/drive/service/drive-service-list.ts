@@ -1,11 +1,15 @@
 import { addParentFolderIdToQuery } from "./drive-service-utils";
 import driveService from "../drive-service";
 import { Quarter, SchemaFileWithDefaultFields } from "../types";
-import { MIME_TYPE_FOLDER, MIME_TYPE_PDF, INCOMING_INVOICES_FOLDER_ID } from "./drive-service-constants";
+import {
+  MIME_TYPE_FOLDER,
+  MIME_TYPE_PDF,
+  INCOMING_INVOICES_FOLDER_ID,
+  ROOT_FOLDER_ID
+} from "./drive-service-constants";
 import { ServiceError } from "./service-error";
-import { deleteFileOrFolder } from "./drive-service-delete";
 
-export const listDriveFolders = async (parentFolderId?: string): Promise<SchemaFileWithDefaultFields[]> => {
+export const listDriveFolders = async (parentFolderId = ROOT_FOLDER_ID): Promise<SchemaFileWithDefaultFields[]> => {
   let q = `mimeType='${MIME_TYPE_FOLDER}'`;
   if (parentFolderId) {
     q = addParentFolderIdToQuery(q, parentFolderId);
@@ -33,7 +37,7 @@ export const listDriveFoldersForYear = async (year: string): Promise<SchemaFileW
   throw new ServiceError(`Folder for year ${year} was not found`, 404);
 };
 
-export const listPdfsInFolder = async (parentFolderId?: string): Promise<SchemaFileWithDefaultFields[]> => {
+export const listPdfsInFolder = async (parentFolderId = ROOT_FOLDER_ID): Promise<SchemaFileWithDefaultFields[]> => {
   let q = `mimeType='${MIME_TYPE_PDF}'`;
   if (parentFolderId) {
     q = addParentFolderIdToQuery(q, parentFolderId);

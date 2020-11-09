@@ -4,8 +4,8 @@ import { Quarter, SchemaFileWithDefaultFields } from "../types";
 import driveService from "../drive-service";
 import {
   INCOMING_INVOICES_FOLDER_ID,
-  INCOMING_INVOICES_FOLDER_NAME,
-  MIME_TYPE_FOLDER
+  INVOICES_INCOMING_FOLDER_NAME,
+  MIME_TYPE_FOLDER, ROOT_FOLDER_ID
 } from "./drive-service-constants";
 import { DOMAIN_OREON, USER_ROBIN_EMAIL } from "../utils";
 import { Readable } from "stream";
@@ -29,18 +29,15 @@ export const addQuarterFolderForYear = async (year: string, quarter: Quarter): P
 };
 
 export const addYearFolder = async (year: string): Promise<SchemaFileWithDefaultFields> => {
-  const createdYearFolder = await addFolder(`${INCOMING_INVOICES_FOLDER_NAME}_${year}`, INCOMING_INVOICES_FOLDER_ID);
-  await setDefaultPermissions(createdYearFolder.id);
-  return createdYearFolder;
+  return await addFolder(`${INVOICES_INCOMING_FOLDER_NAME}_${year}`, INCOMING_INVOICES_FOLDER_ID);
 };
 
 export const addQuarterFolder = async (year: string, quarter: Quarter, yearFolderId: string) => {
-  const createdQuarterFolder = await addFolder(`${INCOMING_INVOICES_FOLDER_NAME}_${year}_${quarter}`, yearFolderId);
-  await setDefaultPermissions(createdQuarterFolder.id);
-  return createdQuarterFolder;
-}
+  return await addFolder(`${INVOICES_INCOMING_FOLDER_NAME}_${year}_${quarter}`, yearFolderId);
+};
 
-export const addFolder = async (name: string, parentFolderId?: string): Promise<SchemaFileWithDefaultFields> => {
+export const addFolder = async (name: string, parentFolderId = ROOT_FOLDER_ID):
+  Promise<SchemaFileWithDefaultFields> => {
   const requestBody: Params$Resource$Files$Create = {
     name,
     mimeType: MIME_TYPE_FOLDER
@@ -51,6 +48,7 @@ export const addFolder = async (name: string, parentFolderId?: string): Promise<
   const { data: createdFolder } = await driveService.files.create({
     requestBody
   }) as { data: SchemaFileWithDefaultFields };
+  await setDefaultPermissions(createdFolder.id);
   return createdFolder;
 };
 

@@ -12,9 +12,9 @@ const { router, app } = getConfiguredRouterAndApp("invoices-incoming");
 // ----- GET -------
 
 router.get("/", async (request, response) => {
-  const { parentFolderId } = request.params as { parentFolderId?: string };
+  const { parentFolderId } = request.query;
   try {
-    response.json(await listPdfsInFolder(parentFolderId));
+    response.json(await listPdfsInFolder(parentFolderId as string | undefined));
   } catch (error) {
     response.handleError(error);
   }

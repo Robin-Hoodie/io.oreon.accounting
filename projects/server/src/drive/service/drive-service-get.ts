@@ -1,6 +1,6 @@
 import {
   INCOMING_INVOICES_FOLDER_ID,
-  INCOMING_INVOICES_FOLDER_NAME,
+  INVOICES_INCOMING_FOLDER_NAME,
   MIME_TYPE_FOLDER
 } from "./drive-service-constants";
 import { addParentFolderIdToQuery } from "./drive-service-utils";
@@ -20,7 +20,7 @@ export const getFolder = async (id: string): Promise<Required<Schema$File>> => {
 
 export const getYearFolder = async (year: string): Promise<SchemaFileWithDefaultFields> => {
   const q =
-    addParentFolderIdToQuery(`mimeType='${MIME_TYPE_FOLDER}' and name='${INCOMING_INVOICES_FOLDER_NAME}_${year}'`,
+    addParentFolderIdToQuery(`mimeType='${MIME_TYPE_FOLDER}' and name='${INVOICES_INCOMING_FOLDER_NAME}_${year}'`,
       INCOMING_INVOICES_FOLDER_ID);
   const { data: yearFolderData } = await driveService.files.list({ q });
   if (yearFolderData.files?.length) {
@@ -37,7 +37,7 @@ export const getQuarterForYearFolder =
     const yearFolder = await getYearFolder(year);
     if (yearFolder) {
       const q = addParentFolderIdToQuery(`mimeType='${MIME_TYPE_FOLDER}' and 
-        name='${INCOMING_INVOICES_FOLDER_NAME}_${year}_${quarter}'`, yearFolder.id);
+        name='${INVOICES_INCOMING_FOLDER_NAME}_${year}_${quarter}'`, yearFolder.id);
       const { data: quarterFolder } = await driveService.files.list({ q });
       if (quarterFolder.files?.length) {
         if (quarterFolder.files.length > 1) {

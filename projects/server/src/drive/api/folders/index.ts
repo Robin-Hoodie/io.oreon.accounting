@@ -1,4 +1,4 @@
-import { addQuarterFolderForYear } from "../../service/drive-service-create";
+import { addFolder, addQuarterFolderForYear } from "../../service/drive-service-create";
 import { getFolder, getQuarterForYearFolder, getYearFolder } from "../../service/drive-service-get";
 import { deleteQuarterFolder, deleteYearFolder } from "../../service/drive-service-delete";
 import type { Quarter } from "../../types";
@@ -6,15 +6,15 @@ import { listDriveFolders } from "../../service/drive-service-list";
 import getConfiguredRouterAndApp from "../../../server";
 import * as functions from "firebase-functions";
 import { DEFAULT_REGION, EXPRESS_QUARTER_REGEX, EXPRESS_YEAR_REGEX } from "../../utils";
-import { INCOMING_INVOICES_FOLDER_ID } from "../../service/drive-service-constants";
 
 const { router, app } = getConfiguredRouterAndApp("invoices-incoming");
 
 // ----- GET -------
 
 router.get("/", async (request, response) => {
+  const { parentFolderId } = request.query;
   try {
-    response.json(await listDriveFolders(INCOMING_INVOICES_FOLDER_ID));
+    response.json(await listDriveFolders(parentFolderId as string | undefined));
   } catch (error) {
     response.handleError(error);
   }
@@ -60,6 +60,12 @@ router.post(`/:year(${EXPRESS_YEAR_REGEX})/:quarter(${EXPRESS_QUARTER_REGEX})`, 
 
 router.post("/:name", async (request, response) => {
   const { name } = request.params;
+  const { parentFolderId } = request.query;
+  try {
+    response.status(201).json(await addFolder(name, parentFolderId as string | undefined));
+  } catch (error) {
+    response.handleError(error);
+  }
 });
 
 // ----- DELETE -------
