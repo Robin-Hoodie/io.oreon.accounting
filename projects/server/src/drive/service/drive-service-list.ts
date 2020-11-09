@@ -2,6 +2,7 @@ import { addParentFolderIdToQuery } from "./drive-service-utils";
 import driveService from "../drive-service";
 import { Quarter, SchemaFileWithDefaultFields } from "../types";
 import { MIME_TYPE_FOLDER, MIME_TYPE_PDF, INCOMING_INVOICES_FOLDER_ID } from "./drive-service-constants";
+import { ServiceError } from "./service-error";
 
 export const listDriveFolders = async (parentFolderId?: string): Promise<SchemaFileWithDefaultFields[]> => {
   let q = `mimeType='${MIME_TYPE_FOLDER}'`;
@@ -11,7 +12,11 @@ export const listDriveFolders = async (parentFolderId?: string): Promise<SchemaF
   const { data: driveFolders } = await driveService.files.list({
     q
   }) as { data: { files: SchemaFileWithDefaultFields[] } };
-  return driveFolders.files;
+  if (driveFolders.files.length) {
+    return driveFolders.files;
+  }
+  const message = parentFolderId ? `No folders were found in folder with id ${parentFolderId}` : "No folders were found";
+  throw new ServiceError(message, 404);
 };
 
 export const listDriveFoldersForYear = async (year: string): Promise<SchemaFileWithDefaultFields[]> => {
@@ -23,7 +28,7 @@ export const listDriveFoldersForYear = async (year: string): Promise<SchemaFileW
   if (yearFolder) {
     return await listDriveFolders(yearFolder.id);
   }
-  return [];
+  throw new ServiceError(`Folder for year ${year} was not found`, 404);
 };
 
 export const listPdfsInFolder = async (parentFolderId?: string): Promise<SchemaFileWithDefaultFields[]> => {
@@ -46,7 +51,11 @@ export const listPdfsInFolder = async (parentFolderId?: string): Promise<SchemaF
     ];
     nextPageToken = data.nextPageToken;
   }
-  return files;
+  if (files.length) {
+    return files;
+  }
+  const message = parentFolderId ? `No files were found in folder with id ${parentFolderId}` : "No files were found";
+  throw new ServiceError(message, 404);
 };
 
 export const listPdfsInQuarterInYear =
@@ -59,5 +68,5 @@ export const listPdfsInQuarterInYear =
     if (quarterFolder) {
       return listPdfsInFolder(quarterFolder.id);
     }
-    return [];
+    throw new ServiceError(`No folder for quarter ${quarter} was found for year ${year}`, 404);
   };

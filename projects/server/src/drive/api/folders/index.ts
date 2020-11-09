@@ -2,7 +2,7 @@ import { addQuarterFolderForYear } from "../../service/drive-service-create";
 import { getQuarterForYearFolder, getYearFolder } from "../../service/drive-service-get";
 import { deleteQuarterFolder, deleteYearFolder } from "../../service/drive-service-delete";
 import type { Quarter } from "../../types";
-import { listDriveFolders, listDriveFoldersForYear } from "../../service/drive-service-list";
+import { listDriveFolders } from "../../service/drive-service-list";
 import getConfiguredRouterAndApp from "../../../server";
 import * as functions from "firebase-functions";
 import { DEFAULT_REGION } from "../../utils";
@@ -29,8 +29,7 @@ router.get("/:year", async (request, response) => {
 router.get("/:year/:quarter", async (request, response) => {
   const { year, quarter } = request.params as { year: string, quarter: Quarter };
   try {
-    const quarterFolderForYear = await getQuarterForYearFolder(year, quarter);
-    response.json(quarterFolderForYear);
+    response.json(await getQuarterForYearFolder(year, quarter));
   } catch (error) {
     response.handleError(error);
   }
@@ -41,8 +40,7 @@ router.get("/:year/:quarter", async (request, response) => {
 router.post("/:year/:quarter", async (request, response) => {
   const { year, quarter } = request.params;
   try {
-    const createdQuarterFolder = await addQuarterFolderForYear(year, quarter as Quarter);
-    response.status(201).json(createdQuarterFolder);
+    response.status(201).json(await addQuarterFolderForYear(year, quarter as Quarter));
   } catch (error) {
     response.handleError(error);
   }

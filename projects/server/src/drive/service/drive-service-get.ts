@@ -8,7 +8,7 @@ import driveService from "../drive-service";
 import { Quarter, SchemaFileWithDefaultFields } from "../types";
 import { ServiceError } from "./service-error";
 
-export const getYearFolder = async (year: string): Promise<SchemaFileWithDefaultFields | undefined> => {
+export const getYearFolder = async (year: string): Promise<SchemaFileWithDefaultFields> => {
   const q =
     addParentFolderIdToQuery(`mimeType='${MIME_TYPE_FOLDER}' and name='${INCOMING_INVOICES_FOLDER_NAME}_${year}'`,
       INCOMING_INVOICES_FOLDER_ID);
@@ -23,7 +23,7 @@ export const getYearFolder = async (year: string): Promise<SchemaFileWithDefault
 };
 
 export const getQuarterForYearFolder =
-  async (year: string, quarter: Quarter): Promise<SchemaFileWithDefaultFields | undefined> => {
+  async (year: string, quarter: Quarter): Promise<SchemaFileWithDefaultFields> => {
     const yearFolder = await getYearFolder(year);
     if (yearFolder) {
       const q = addParentFolderIdToQuery(`mimeType='${MIME_TYPE_FOLDER}' and 
@@ -34,9 +34,8 @@ export const getQuarterForYearFolder =
           throw new ServiceError(`More than 2 folders found for quarter ${quarter}`, 400);
         }
         return quarterFolder.files[0] as SchemaFileWithDefaultFields;
-      } else {
-        throw new ServiceError(`No folder was found for quarter ${quarter} in year ${year}`, 404);
       }
+      throw new ServiceError(`No folder was found for quarter ${quarter} in year ${year}`, 404);
     }
     throw new ServiceError(`No folder was found for year ${year}`, 404);
   };
