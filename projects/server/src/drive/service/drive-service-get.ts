@@ -1,11 +1,11 @@
 import {
-  INCOMING_INVOICES_FOLDER_ID,
-  INVOICES_INCOMING_FOLDER_NAME,
-  MIME_TYPE_FOLDER
+  INVOICES_INCOMING_FOLDER_ID,
+  MIME_TYPE_FOLDER,
+  INVOICES_INCOMING_NAME
 } from "./drive-service-constants";
 import { addParentFolderIdToQuery } from "./drive-service-utils";
 import driveService from "../drive-service";
-import { Quarter, SchemaFileWithDefaultFields } from "../types";
+import { Company, Quarter, SchemaFileWithDefaultFields } from "../types";
 import { ServiceError } from "./service-error";
 import { drive_v3 } from "googleapis";
 import Schema$File = drive_v3.Schema$File;
@@ -18,10 +18,10 @@ export const getFolder = async (id: string): Promise<Required<Schema$File>> => {
   throw new ServiceError(`No folder with id ${id} was found`, 404);
 };
 
-export const getYearFolder = async (year: string): Promise<SchemaFileWithDefaultFields> => {
+export const getYearFolder = async (company: Company, year: string): Promise<SchemaFileWithDefaultFields> => {
   const q =
-    addParentFolderIdToQuery(`mimeType='${MIME_TYPE_FOLDER}' and name='${INVOICES_INCOMING_FOLDER_NAME}_${year}'`,
-      INCOMING_INVOICES_FOLDER_ID);
+    addParentFolderIdToQuery(`mimeType='${MIME_TYPE_FOLDER}' and name='${INVOICES_INCOMING_NAME}_${year}'`,
+      INVOICES_INCOMING_FOLDER_ID[company]);
   const { data: yearFolderData } = await driveService.files.list({ q });
   if (yearFolderData.files?.length) {
     if (yearFolderData.files.length > 1) {
@@ -33,11 +33,11 @@ export const getYearFolder = async (year: string): Promise<SchemaFileWithDefault
 };
 
 export const getQuarterForYearFolder =
-  async (year: string, quarter: Quarter): Promise<SchemaFileWithDefaultFields> => {
-    const yearFolder = await getYearFolder(year);
+  async (company: Company, year: string, quarter: Quarter): Promise<SchemaFileWithDefaultFields> => {
+    const yearFolder = await getYearFolder(company, year);
     if (yearFolder) {
       const q = addParentFolderIdToQuery(`mimeType='${MIME_TYPE_FOLDER}' and 
-        name='${INVOICES_INCOMING_FOLDER_NAME}_${year}_${quarter}'`, yearFolder.id);
+        name='${INVOICES_INCOMING_NAME}_${year}_${quarter}'`, yearFolder.id);
       const { data: quarterFolder } = await driveService.files.list({ q });
       if (quarterFolder.files?.length) {
         if (quarterFolder.files.length > 1) {
@@ -50,9 +50,10 @@ export const getQuarterForYearFolder =
     throw new ServiceError(`No folder was found for year ${year}`, 404);
   };
 
-export const quarterForYearFolderExists = async (year: string, quarter: Quarter): Promise<boolean> => {
+export const quarterForYearFolderExists =
+  async (company: Company, year: string, quarter: Quarter): Promise<boolean> => {
   try {
-    await getQuarterForYearFolder(year, quarter)
+    await getQuarterForYearFolder(company, year, quarter)
     return true;
   } catch (error) {
     if (error.statusCode === 404) {

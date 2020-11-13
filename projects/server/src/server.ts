@@ -1,4 +1,4 @@
-import express  from "express";
+import express, { Express } from "express";
 import { configureMiddleware } from "./middleware";
 
 const getConfiguredRouterAndApp = (prefix: string): { app: express.Application, router: express.Router } => {
@@ -12,5 +12,10 @@ const getConfiguredRouterAndApp = (prefix: string): { app: express.Application, 
   };
 };
 
+export const getConfiguredApp = (): Express => {
+  const app = express();
+  configureMiddleware(app);
+  return app;
+};
 
 export default getConfiguredRouterAndApp;
