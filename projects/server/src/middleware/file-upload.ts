@@ -68,14 +68,14 @@ export const filesUpload: RequestHandler = (req, res, next) => {
       try {
         await Promise.all(fileWrites);
         req.body = fields;
-        req.files = files;
+        // req.files = files;
         next();
       } catch (e) {
         next(e);
       }
     });
 
-    busboy.end(req.rawBody);
+    // busboy.end(req.rawBody);
   } else {
     next();
   }

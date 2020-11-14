@@ -4,11 +4,8 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch --incremental",
-    "serve": "node startup-scripts/serve.js",
-    "shell": "concurrently -k -n \"firebase,tsc\"-c \"red,blue\" --restart-tries 1 --restart-after 3000 --handle-input \"firebase functions:shell\" \"yarn build:watch\"",
-    "start": "node startup-scripts/shell.js",
-    "deploy": "yarn build && firebase deploy --only functions",
-    "logs": "firebase functions:log",
+    "start": "node startup-scripts/start.js",
+    "deploy": "echo 'to implement with netlify'",
     "lint": "eslint --fix --ext .js,.ts .",
     "precommit": "lint-staged"
   },
@@ -18,15 +15,15 @@
   "main": "dist/index.js",
   "dependencies": {
     "busboy": "^0.3.1",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "firebase-admin": "^9.3.0",
-    "firebase-functions": "^3.11.0",
     "googleapis": "^59.0.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "serverless-http": "^2.6.0"
   },
   "devDependencies": {
-    "@types/busboy": "^0.2.3",
     "concurrently": "^5.3.0"
   }
 }

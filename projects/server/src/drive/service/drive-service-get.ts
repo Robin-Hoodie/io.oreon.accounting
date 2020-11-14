@@ -5,7 +5,7 @@ import {
 } from "./drive-service-constants";
 import { addParentFolderIdToQuery } from "./drive-service-utils";
 import driveService from "../drive-service";
-import { Company, Quarter, SchemaFileWithDefaultFields } from "../types";
+import { Company, Quarter, SchemaFileWithDefaultFields } from "../../types";
 import { ServiceError } from "./service-error";
 import { drive_v3 } from "googleapis";
 import Schema$File = drive_v3.Schema$File;

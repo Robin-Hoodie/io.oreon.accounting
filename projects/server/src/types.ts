@@ -1,6 +1,5 @@
 import { drive_v3 } from "googleapis";
 import Schema$File = drive_v3.Schema$File;
-import type { HttpsFunction} from "firebase-functions";
 
 const stringLitArray = <L extends string> (arr: L[]) => arr;
 
@@ -15,8 +14,9 @@ export interface SchemaFileWithDefaultFields extends Schema$File {
 }
 
 export type Company = "OREON" | "OREON_IT_CONSULTING";
-export type FolderPrefix = "/invoices-incoming" | "/invoices-outgoing";
+export type FolderPrefix = "invoices-incoming" | "invoices-outgoing";
 
-export interface FirebaseFunctions {
-  [firebaseFunctionName: string]: HttpsFunction
+export interface RouteConfig {
+  company: Company;
+  folderPrefix: FolderPrefix
 }

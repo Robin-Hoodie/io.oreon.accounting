@@ -1,6 +1,6 @@
 import { getQuarterForYearFolder, getYearFolder } from "./drive-service-get";
 import driveService from "../drive-service";
-import { Company, Quarter } from "../types";
+import { Company, Quarter } from "../../types";
 import { ServiceError } from "./service-error";
 
 export const deleteYearFolder = async (company: Company, year: string): Promise<void> => {

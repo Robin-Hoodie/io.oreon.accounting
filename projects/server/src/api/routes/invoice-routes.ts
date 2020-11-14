@@ -1,15 +1,12 @@
-import { Company, FolderPrefix, Quarter, SchemaFileWithDefaultFields } from "../../types";
-import { Express } from "express";
-import { getConfiguredApp } from "../../../server";
+import { RouteConfig, Quarter, SchemaFileWithDefaultFields } from "../../types";
 import { buildInvoiceRoute } from "../../utils";
-import { uploadInvoice } from "../../service/drive-service-create";
-import { listPdfsInQuarterInYear } from "../../service/drive-service-list";
-import type { UploadedFile } from "../../../middleware/file-upload";
+import { uploadInvoice } from "../../drive/service/drive-service-create";
+import { listPdfsInQuarterInYear } from "../../drive/service/drive-service-list";
+import type { UploadedFile } from "../../middleware/file-upload";
+import type { Express } from "express";
 
-export const configureInvoiceRoutes = (company: Company, folderPrefix: FolderPrefix): Express => {
-  const invoices = getConfiguredApp();
-
-  invoices.get(buildInvoiceRoute(folderPrefix), async (request, response) => {
+export const configureInvoiceRoutes = (app: Express, { company, folderPrefix }: RouteConfig): void => {
+  app.get(buildInvoiceRoute(company, folderPrefix), async (request, response) => {
     const { quarter, year } = request.params;
     try {
       response.json(await listPdfsInQuarterInYear(company, quarter as Quarter, year));
@@ -18,7 +15,7 @@ export const configureInvoiceRoutes = (company: Company, folderPrefix: FolderPre
     }
   });
 
-  invoices.post(buildInvoiceRoute(folderPrefix), async (request, response) => {
+  app.post(buildInvoiceRoute(company, folderPrefix), async (request, response) => {
     const { quarter, year } = request.params as { quarter: Quarter, year: string };
     const uploadedInvoices: SchemaFileWithDefaultFields[] = [];
     try {
@@ -32,5 +29,4 @@ export const configureInvoiceRoutes = (company: Company, folderPrefix: FolderPre
     }
   });
 
-  return invoices;
 };

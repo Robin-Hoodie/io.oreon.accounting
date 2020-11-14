@@ -1,4 +1,15 @@
-import {Invoice, Currency} from "@/model/invoice";
+import axios, { AxiosResponse } from "axios";
+import { Invoice } from "@/model/invoice";
+
+const invoicesBaseUrl = "/oreon-invoices/invoices-incoming";
+
+const responseInterceptor = ((response: AxiosResponse) => response.data);
+
+const axiosInstance = axios.create({
+  baseURL: process.env.VUE_APP_BASE_URL
+});
+
+axiosInstance.interceptors.response.use(responseInterceptor);
 
 export const http = {
   // Mimic API call
@@ -11,34 +22,35 @@ export const http = {
   }
 };
 
-const getRandomYear = () => Math.round(Math.random() * 20) + 2000;
-const getRandomMonth = () => Math.round(Math.random() * 11);
-const getRandomDay = () => Math.round(Math.random() * 28);
-const getRandomDate = () => new Date(getRandomYear(), getRandomMonth(), getRandomDay());
+// const getRandomYear = () => Math.round(Math.random() * 20) + 2000;
+// const getRandomMonth = () => Math.round(Math.random() * 11);
+// const getRandomDay = () => Math.round(Math.random() * 28);
+// const getRandomDate = () => new Date(getRandomYear(), getRandomMonth(), getRandomDay());
 
 export const getInvoices = async (): Promise<Invoice[]> => {
-  return http.get<Invoice[]>([
-    new Invoice(20001,
-        getRandomDate(),
-        getRandomDate(),
-        "SD Worx"
-        , 87.00,
-        Currency.EUR,
-        "juli-2020.pdf",
-        "Beheer loon en BVH Juli 2020"),
-    new Invoice(20002,
-        getRandomDate(),
-        getRandomDate(),
-        "Coolblue",
-        210.00, Currency.EUR,
-        "macbook.pdf",
-        "Macbook Pro 2020"),
-    new Invoice(20003,
-        getRandomDate(),
-        getRandomDate(),
-        "bol.com",
-        300.00,
-        Currency.USD,
-        "monitor.pdf")
-  ]);
+  // return http.get<Invoice[]>([
+  //   new Invoice(20001,
+  //       getRandomDate(),
+  //       getRandomDate(),
+  //       "SD Worx"
+  //       , 87.00,
+  //       Currency.EUR,
+  //       "juli-2020.pdf",
+  //       "Beheer loon en BVH Juli 2020"),
+  //   new Invoice(20002,
+  //       getRandomDate(),
+  //       getRandomDate(),
+  //       "Coolblue",
+  //       210.00, Currency.EUR,
+  //       "macbook.pdf",
+  //       "Macbook Pro 2020"),
+  //   new Invoice(20003,
+  //       getRandomDate(),
+  //       getRandomDate(),
+  //       "bol.com",
+  //       300.00,
+  //       Currency.USD,
+  //       "monitor.pdf")
+  // ]);
+  return axiosInstance.get(`${invoicesBaseUrl}/years/2020/quarters/Q1/invoices`);
 };

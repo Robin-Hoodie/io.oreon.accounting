@@ -29,7 +29,7 @@ import type { Invoice } from "@/model/invoice";
 
 export default {
   name: "ViewInvoiceList",
-  async setup (): { invoices: Invoice[] } {
+  async setup (): Promise<{ invoices: Invoice[] }> {
     return {
       invoices: await getInvoices()
     };

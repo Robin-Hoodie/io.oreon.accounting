@@ -1,14 +1,15 @@
-import { Params$Resource$Files$Create } from "googleapis/build/src/apis/drive/v3";
+import { drive_v3 } from "googleapis";
+import Params$Resource$Files$Create = drive_v3.Params$Resource$Files$Create;
 import { getQuarterForYearFolder, getYearFolder, quarterForYearFolderExists } from "./drive-service-get";
 import driveService from "../drive-service";
 import {
   INVOICES_INCOMING_FOLDER_ID, INVOICES_INCOMING_NAME,
   MIME_TYPE_FOLDER, ROOT_FOLDER_ID
 } from "./drive-service-constants";
-import { DOMAIN_OREON, USER_ROBIN_EMAIL } from "../utils";
+import { DOMAIN_OREON, USER_ROBIN_EMAIL } from "../../utils";
 import { Readable } from "stream";
 import { ServiceError } from "./service-error";
-import type { Company, Quarter, SchemaFileWithDefaultFields } from "../types";
+import type { Company, Quarter, SchemaFileWithDefaultFields } from "../../types";
 
 export const addQuarterFolderForYear = async (
   company: Company,

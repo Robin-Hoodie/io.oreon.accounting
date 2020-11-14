@@ -1,0 +1,8 @@
+[build]
+  publish = "projects/client/dist"
+  command = "client:build"
+  functions = "projects/server/dist/api"
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+

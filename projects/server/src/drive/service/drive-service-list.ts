@@ -7,7 +7,7 @@ import {
   ROOT_FOLDER_ID
 } from "./drive-service-constants";
 import { ServiceError } from "./service-error";
-import type { Company, Quarter, SchemaFileWithDefaultFields } from "../types";
+import type { Company, Quarter, SchemaFileWithDefaultFields } from "../../types";
 
 export const listDriveFolders = async (parentFolderId = ROOT_FOLDER_ID): Promise<SchemaFileWithDefaultFields[]> => {
   let q = `mimeType='${MIME_TYPE_FOLDER}'`;
