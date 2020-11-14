@@ -2,16 +2,14 @@ import fs from "fs";
 import os from "os";
 import Busboy from "busboy";
 import path from "path";
-import type { RequestHandler } from "express"
+import type { RequestHandler } from "express";
 
-export interface UploadedFiles {
-  [index: string]: {
-    filename: string;
-    encoding: string;
-    mimetype: string;
-    buffer: Buffer;
-    size: number;
-  }
+export interface UploadedFile {
+  filename: string;
+  encoding: string;
+  mimetype: string;
+  buffer: Buffer;
+  size: number;
 }
 
 // Taken from https://gist.github.com/msukmanowsky/c8daf3720c2839d3c535afc69234ab9e
@@ -25,7 +23,7 @@ export const filesUpload: RequestHandler = (req, res, next) => {
     });
 
     const fields: { [key: string]: string } = {};
-    const files: UploadedFiles = {};
+    const files: UploadedFile[] = [];
     const fileWrites: Promise<void>[] = [];
 
     const tmpdir = os.tmpdir();
@@ -48,13 +46,13 @@ export const filesUpload: RequestHandler = (req, res, next) => {
               return reject(err);
             }
             const size = Buffer.byteLength(buffer);
-            files[fieldname] = {
+            files.push({
               filename,
               encoding,
               mimetype,
               buffer,
               size
-            };
+            });
             try {
               fs.unlinkSync(filepath);
             } catch (err) {

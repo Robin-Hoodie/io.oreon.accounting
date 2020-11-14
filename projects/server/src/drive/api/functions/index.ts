@@ -20,4 +20,4 @@ export const configureFunctionsForCompany = (company: Company): FirebaseFunction
   };
 };
 
-export { configureUtilsRoutes} from "../folders/utils";
+export { configureUtilsRoutes } from "../folders/utils";

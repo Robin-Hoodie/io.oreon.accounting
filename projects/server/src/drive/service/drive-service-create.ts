@@ -71,6 +71,7 @@ export const setDefaultPermissions = async (folderId: string): Promise<void> => 
   });
   await driveService.permissions.create({
     fileId: folderId,
+    sendNotificationEmail: false,
     requestBody: {
       role: "writer",
       emailAddress: USER_ROBIN_EMAIL,
