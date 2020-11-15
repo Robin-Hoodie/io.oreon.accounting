@@ -1,5 +1,5 @@
 import express, { Express } from "express";
-import { configureMiddleware } from "./middleware/middleware";
+import { configureMiddleware } from "./middleware";
 
 let app: Express;
 

@@ -5,4 +5,6 @@
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
-
+  # Rewrite instead of redirect, see https://docs.netlify.com/routing/redirects/rewrites-proxies
+  # We're doing this because 301s don't work for HTTP methods other than `GET` or `POST`
+  status = 200

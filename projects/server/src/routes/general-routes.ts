@@ -27,8 +27,6 @@ export const configureGeneralRoutes = (app: Express): void => {
   app.post(buildGeneralRoute("folders"), async (request, response) => {
     const { name } = request.body;
     const { parentFolderId } = request.query;
-    console.log("name ", name);
-    console.log("parentFolderId ", parentFolderId);
     try {
       response.status(201).json(await addFolder(name, parentFolderId as string | undefined));
     } catch (error) {

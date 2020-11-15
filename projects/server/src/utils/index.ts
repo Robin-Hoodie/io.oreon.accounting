@@ -6,7 +6,7 @@ export const DOMAIN_OREON = "oreon.io";
 export const EXPRESS_YEAR_REGEX = "20\\d{2}"
 export const EXPRESS_QUARTER_REGEX = "Q[1-4]"
 
-const NETLIFY_BASE_URL = "/.netlify/functions"
+const BASE_URL = "/api"
 
 const companyPrefix = (company: Company) => {
   if (company === "OREON") {
@@ -19,7 +19,7 @@ const companyPrefix = (company: Company) => {
 }
 
 export const buildYearRoute = (company: Company, folderPrefix: FolderPrefix, withRouteParam = false): string => {
-  const yearsRoute = `${NETLIFY_BASE_URL}/${companyPrefix(company)}/${folderPrefix}/years`;
+  const yearsRoute = `${BASE_URL}/${companyPrefix(company)}/${folderPrefix}/years`;
   if (withRouteParam) {
     return `${yearsRoute}/:year(${EXPRESS_YEAR_REGEX})`
   }
@@ -42,4 +42,4 @@ export const buildInvoiceRoute = (company: Company, folderPrefix: FolderPrefix, 
   return invoiceRoute;
 }
 
-export const buildGeneralRoute = (suffix: string): string => `${NETLIFY_BASE_URL}/general/${suffix}`;
+export const buildGeneralRoute = (suffix: string): string => `${BASE_URL}/general/${suffix}`;
