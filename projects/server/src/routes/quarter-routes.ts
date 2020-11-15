@@ -1,9 +1,9 @@
-import { buildQuarterRoute } from "../../utils";
-import { addQuarterFolderForYear } from "../../drive/service/drive-service-create";
-import { deleteQuarterFolder } from "../../drive/service/drive-service-delete";
-import { getQuarterForYearFolder } from "../../drive/service/drive-service-get";
+import { buildQuarterRoute } from "../utils";
+import { addQuarterFolderForYear } from "../drive/service/drive-service-create";
+import { deleteQuarterFolder } from "../drive/service/drive-service-delete";
+import { getQuarterForYearFolder } from "../drive/service/drive-service-get";
 import type { Express } from "express";
-import type { Quarter, RouteConfig } from "../../types";
+import type { Quarter, RouteConfig } from "../types";
 
 export const configureQuarterRoutes = (app: Express, { company, folderPrefix }: RouteConfig): void => {
   app.get(buildQuarterRoute(company, folderPrefix, true), async (request, response) => {
@@ -16,6 +16,8 @@ export const configureQuarterRoutes = (app: Express, { company, folderPrefix }: 
   });
 
   app.post(buildQuarterRoute(company, folderPrefix), async (request, response) => {
+    console.log("Request body ", request.body);
+    console.log("Request body type ", typeof request.body);
     const { year } = request.params;
     const { quarter } = request.body as { quarter: Quarter };
     try {

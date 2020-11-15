@@ -2,25 +2,25 @@
   "name": "io.oreon.accounting.server",
   "version": "0.0.1",
   "scripts": {
-    "build": "tsc",
-    "build:watch": "tsc --watch --incremental",
+    "type-check": "tsc",
+    "build": "babel src -x .js,.ts -d dist --copy-files",
+    "build:watch": "yarn build -w",
     "start": "node startup-scripts/start.js",
     "deploy": "echo 'to implement with netlify'",
-    "lint": "eslint --fix --ext .js,.ts .",
-    "precommit": "lint-staged"
+    "lint": "eslint --fix --ext .js,.ts ."
   },
   "engines": {
     "node": "12"
   },
   "main": "dist/index.js",
   "dependencies": {
-    "busboy": "^0.3.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "firebase-admin": "^9.3.0",
     "googleapis": "^59.0.0",
     "morgan": "^1.10.0",
+    "multer": "^1.4.2",
     "serverless-http": "^2.6.0"
   },
   "devDependencies": {

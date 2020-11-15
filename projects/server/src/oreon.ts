@@ -1,6 +1,6 @@
 import serverless from "serverless-http";
 import { configureYearRoutes } from "./routes/year-routes";
-import { getConfiguredApp } from "../server";
+import { getConfiguredApp } from "./server";
 import { configureQuarterRoutes } from "./routes/quarter-routes";
 import { configureInvoiceRoutes } from "./routes/invoice-routes";
 

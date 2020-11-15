@@ -5,7 +5,6 @@
     "start": "vue-cli-service serve --port 8081",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
-    "precommit": "lint-staged",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

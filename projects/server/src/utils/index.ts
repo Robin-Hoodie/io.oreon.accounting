@@ -1,4 +1,4 @@
-import { Company, FolderPrefix } from "./types";
+import { Company, FolderPrefix } from "../types";
 
 export const USER_ROBIN_EMAIL = "robin@oreon.io";
 export const DOMAIN_OREON = "oreon.io";
@@ -42,4 +42,4 @@ export const buildInvoiceRoute = (company: Company, folderPrefix: FolderPrefix, 
   return invoiceRoute;
 }
 
-export const buildUtilsRoute = (suffix: string): string => `${NETLIFY_BASE_URL}/utils/${suffix}`;
+export const buildGeneralRoute = (suffix: string): string => `${NETLIFY_BASE_URL}/general/${suffix}`;

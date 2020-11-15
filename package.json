@@ -14,14 +14,18 @@
     "server:build": "yarn --cwd projects/server build",
     "server:serve": "yarn --cwd projects/server serve",
     "server:deploy": "yarn --cwd projects/server deploy",
-    "server:lint": "yarn --cwd projects/server lint"
+    "server:lint": "yarn --cwd projects/server lint",
+    "server:type-check": "yarn --cwd projects/server type-check"
   },
   "devDependencies": {
-    "@types/busboy": "^0.2.3",
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "@babel/preset-typescript": "^7.12.1",
     "@types/cors": "^2.8.8",
-    "@types/express-fileupload": "^1.1.5",
     "@types/jest": "^24.0.19",
     "@types/morgan": "^1.9.1",
+    "@types/multer": "^1.4.4",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
     "@typescript-eslint/parser": "^4.1.1",
     "@vue/compiler-sfc": "^3.0.0-0",
@@ -48,6 +52,6 @@
     "projects/*"
   ],
   "gitHooks": {
-    "pre-commit": "yarn client:lint && yarn server:lint"
+    "pre-commit": "yarn client:lint && yarn server:lint && yarn server:type-check"
   }
 }

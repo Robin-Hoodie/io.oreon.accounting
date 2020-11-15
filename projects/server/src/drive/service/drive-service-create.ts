@@ -1,5 +1,4 @@
 import { drive_v3 } from "googleapis";
-import Params$Resource$Files$Create = drive_v3.Params$Resource$Files$Create;
 import { getQuarterForYearFolder, getYearFolder, quarterForYearFolderExists } from "./drive-service-get";
 import driveService from "../drive-service";
 import {
@@ -46,7 +45,7 @@ export const addQuarterFolder = async (
 export const addFolder = async (
   name: string,
   parentFolderId = ROOT_FOLDER_ID): Promise<SchemaFileWithDefaultFields> => {
-  const requestBody: Params$Resource$Files$Create = {
+  const requestBody: drive_v3.Schema$File = {
     name,
     mimeType: MIME_TYPE_FOLDER
   };

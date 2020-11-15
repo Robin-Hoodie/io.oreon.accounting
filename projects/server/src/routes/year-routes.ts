@@ -1,8 +1,8 @@
-import { RouteConfig } from "../../types";
-import { buildYearRoute } from "../../utils";
-import { getYearFolder } from "../../drive/service/drive-service-get";
-import { addYearFolder } from "../../drive/service/drive-service-create";
-import { deleteYearFolder } from "../../drive/service/drive-service-delete";
+import { RouteConfig } from "../types";
+import { buildYearRoute } from "../utils";
+import { getYearFolder } from "../drive/service/drive-service-get";
+import { addYearFolder } from "../drive/service/drive-service-create";
+import { deleteYearFolder } from "../drive/service/drive-service-delete";
 import type { Express } from "express";
 
 export const configureYearRoutes = (app: Express, { company, folderPrefix }: RouteConfig): void => {

@@ -10,7 +10,7 @@ const start = async () => {
     await concurrently([
       {
         command: "yarn build:watch",
-        name: "typescript-watcher",
+        name: "babel-cli",
         prefixColor: "cyan"
       },
       {

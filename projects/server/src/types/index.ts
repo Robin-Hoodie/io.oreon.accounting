@@ -1,5 +1,4 @@
 import { drive_v3 } from "googleapis";
-import Schema$File = drive_v3.Schema$File;
 
 const stringLitArray = <L extends string> (arr: L[]) => arr;
 
@@ -7,7 +6,7 @@ export const quarters = stringLitArray(["Q1", "Q2", "Q3", "Q4"]);
 
 export type Quarter = (typeof quarters)[number];
 
-export interface SchemaFileWithDefaultFields extends Schema$File {
+export interface SchemaFileWithDefaultFields extends drive_v3.Schema$File {
   id: string;
   name: string;
   mimeType: string;

@@ -8,12 +8,11 @@ import driveService from "../drive-service";
 import { Company, Quarter, SchemaFileWithDefaultFields } from "../../types";
 import { ServiceError } from "./service-error";
 import { drive_v3 } from "googleapis";
-import Schema$File = drive_v3.Schema$File;
 
-export const getFolder = async (id: string): Promise<Required<Schema$File>> => {
+export const getFolder = async (id: string): Promise<Required<drive_v3.Schema$File>> => {
   const { data: folder } = await driveService.files.get({ fileId: id, fields: "*" });
   if (folder) {
-    return folder as Required<Schema$File>;
+    return folder as Required<drive_v3.Schema$File>;
   }
   throw new ServiceError(`No folder with id ${id} was found`, 404);
 };
