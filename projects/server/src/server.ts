@@ -1,13 +1,9 @@
 import express, { Express } from "express";
 import { configureMiddleware } from "./middleware";
 
-let app: Express;
-
-export const getConfiguredApp = (): Express => {
-  if (!app) {
-    app = express();
-    configureMiddleware(app);
-  }
+export const serverWithMiddleware = (): Express => {
+  const app = express();
+  configureMiddleware(app);
   return app;
 };
 

@@ -6,31 +6,31 @@ import { deleteYearFolder } from "../drive/service/drive-service-delete";
 import type { Express } from "express";
 
 export const configureYearRoutes = (app: Express, { company, folderPrefix }: RouteConfig): void => {
-  app.get(buildYearRoute(company, folderPrefix, true), async (request, response) => {
+  app.get(buildYearRoute(company, folderPrefix, true), async (request, response, next) => {
     const { year } = request.params;
     try {
       response.json(await getYearFolder(company, year));
     } catch (error) {
-      response.handleError(error);
+      next(error);
     }
   });
 
-  app.post(buildYearRoute(company, folderPrefix), async (request, response) => {
+  app.post(buildYearRoute(company, folderPrefix), async (request, response, next) => {
     const { year } = request.body as { year: string };
     try {
       response.status(201).json(await addYearFolder(company, year));
     } catch (error) {
-      response.handleError(error);
+      next(error);
     }
   });
 
-  app.delete(buildYearRoute(company, folderPrefix, true), async (request, response) => {
+  app.delete(buildYearRoute(company, folderPrefix, true), async (request, response, next) => {
     const { year } = request.params;
     try {
       await deleteYearFolder(company, year);
       response.status(204).end();
     } catch (error) {
-      response.handleError(error);
+      next(error);
     }
   });
 

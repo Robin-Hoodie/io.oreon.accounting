@@ -1,10 +1,11 @@
 import serverless from "serverless-http";
 import { configureYearRoutes } from "./routes/year-routes";
-import { getConfiguredApp } from "./server";
+import { serverWithMiddleware } from "./server";
 import { configureQuarterRoutes } from "./routes/quarter-routes";
 import { configureInvoiceRoutes } from "./routes/invoice-routes";
+import { errorHandler } from "./middleware/error-handler";
 
-const app = getConfiguredApp();
+const app = serverWithMiddleware();
 
 configureYearRoutes(app, {
   company: "OREON",
@@ -18,6 +19,8 @@ configureInvoiceRoutes(app, {
   company: "OREON",
   folderPrefix: "invoices-incoming"
 });
+
+app.use(errorHandler);
 
 export const handler = serverless(app);
 

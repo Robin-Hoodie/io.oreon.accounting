@@ -1,9 +1,12 @@
 import serverless from "serverless-http";
 import { configureGeneralRoutes } from "./routes/general-routes";
-import { getConfiguredApp } from "./server";
+import { serverWithMiddleware } from "./server";
+import { errorHandler } from "./middleware/error-handler";
 
-const app = getConfiguredApp();
+const app = serverWithMiddleware();
 
 configureGeneralRoutes(app);
+
+app.use(errorHandler);
 
 export const handler = serverless(app);

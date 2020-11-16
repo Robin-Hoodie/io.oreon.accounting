@@ -5,17 +5,17 @@ import { listPdfsInQuarterInYear } from "../drive/service/drive-service-list";
 import type { Express } from "express";
 
 export const configureInvoiceRoutes = (app: Express, { company, folderPrefix }: RouteConfig): void => {
-  app.get(buildInvoiceRoute(company, folderPrefix), async (request, response) => {
+  app.get(buildInvoiceRoute(company, folderPrefix), async (request, response, next) => {
     console.log("Req method is ", request.method);
     const { quarter, year } = request.params;
     try {
       response.json(await listPdfsInQuarterInYear(company, quarter as Quarter, year));
     } catch (error) {
-      response.handleError(error);
+      next(error);
     }
   });
 
-  app.post(buildInvoiceRoute(company, folderPrefix), async (request, response) => {
+  app.post(buildInvoiceRoute(company, folderPrefix), async (request, response, next) => {
     console.log("Uploading invoices");
     const { quarter, year } = request.params as { quarter: Quarter, year: string };
     const uploadedInvoices: SchemaFileWithDefaultFields[] = [];
@@ -26,7 +26,7 @@ export const configureInvoiceRoutes = (app: Express, { company, folderPrefix }: 
       }
       response.status(201).json(uploadedInvoices);
     } catch (error) {
-      response.handleError(error);
+      next(error);
     }
   });
 
