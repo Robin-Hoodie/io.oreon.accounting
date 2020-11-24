@@ -6,7 +6,6 @@ import type { Express } from "express";
 
 export const configureInvoiceRoutes = (app: Express, { company, folderPrefix }: RouteConfig): void => {
   app.get(buildInvoiceRoute(company, folderPrefix), async (request, response, next) => {
-    console.log("Req method is ", request.method);
     const { quarter, year } = request.params;
     try {
       response.json(await listPdfsInQuarterInYear(company, quarter as Quarter, year));
@@ -16,13 +15,13 @@ export const configureInvoiceRoutes = (app: Express, { company, folderPrefix }: 
   });
 
   app.post(buildInvoiceRoute(company, folderPrefix), async (request, response, next) => {
-    console.log("Uploading invoices");
     const { quarter, year } = request.params as { quarter: Quarter, year: string };
     const uploadedInvoices: SchemaFileWithDefaultFields[] = [];
     try {
-      // TODO: Add file type
-      for (const file of request.files as unknown as any) {
-        uploadedInvoices.push(await uploadInvoice(company, year, quarter, file.buffer, file.filename, file.mimetype));
+      for (const file of request.files as Express.Multer.File[]) {
+        uploadedInvoices.push(
+          await uploadInvoice(company, year, quarter, file.buffer, file.originalname, file.mimetype)
+        );
       }
       response.status(201).json(uploadedInvoices);
     } catch (error) {
