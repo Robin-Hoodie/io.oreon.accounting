@@ -24,14 +24,21 @@
 </template>
 
 <script lang="ts">
+import gql from "graphql-tag";
 import { getInvoices } from "@/http";
 import type { Invoice } from "@/model/invoice";
 
 export default {
   name: "ViewInvoiceList",
-  async setup (): Promise<{ invoices: Invoice[] }> {
+  apollo: {
+    books: gql`query {
+        books
+    }`
+  },
+  async setup (): Promise<{ invoices: Invoice[], books: any[] }> {
     return {
-      invoices: await getInvoices()
+      books: [],
+      invoices: []
     };
   }
 };

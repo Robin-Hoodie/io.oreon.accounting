@@ -1,4 +1,5 @@
 import { drive_v3 } from "googleapis";
+import fs from "fs";
 import { getQuarterForYearFolder, getYearFolder, quarterForYearFolderExists } from "./drive-service-get";
 import driveService from "../drive-service";
 import {
@@ -6,9 +7,8 @@ import {
   MIME_TYPE_FOLDER, ROOT_FOLDER_ID
 } from "./drive-service-constants";
 import { DOMAIN_OREON, USER_ROBIN_EMAIL } from "../../utils";
-import { Readable } from "stream";
 import { ServiceError } from "./service-error";
-import type { Company, Quarter, SchemaFileWithDefaultFields } from "../../types";
+import type { Company, FilePayload, Quarter, SchemaFileWithDefaultFields } from "../../types";
 
 export const addQuarterFolderForYear = async (
   company: Company,
@@ -80,13 +80,17 @@ export const setDefaultPermissions = async (folderId: string): Promise<void> => 
   });
 };
 
-/// TODO: What if quarter/year folder does not exist?
 // TODO: Add parent folder in request
 // TODO: Package buffer/fileName/mimeType in object
 export const uploadInvoice =
-  async (company: Company, year: string, quarter: Quarter, buffer: Buffer, fileName: string, mimeType: string):
+  async (company: Company, year: string, quarter: Quarter, { filePath, fileName, mimeType }: FilePayload):
     Promise<SchemaFileWithDefaultFields> => {
-    const parentFolder = await getQuarterForYearFolder(company, year, quarter);
+    let parentFolder: SchemaFileWithDefaultFields;
+    if (await quarterForYearFolderExists(company, year, quarter)) {
+      parentFolder = await addQuarterFolderForYear(company, year, quarter);
+    } else {
+      parentFolder = await getQuarterForYearFolder(company, year, quarter);
+    }
     const { data: uploadedInvoice } = await driveService.files.create({
       requestBody: {
         name: fileName,
@@ -94,7 +98,7 @@ export const uploadInvoice =
       },
       media: {
         mimeType,
-        body: Readable.from(buffer)
+        body: fs.createReadStream(filePath)
       }
     }) as { data: SchemaFileWithDefaultFields };
     await setDefaultPermissions(uploadedInvoice.id);
