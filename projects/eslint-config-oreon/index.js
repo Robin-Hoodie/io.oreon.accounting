@@ -40,6 +40,7 @@ module.exports = {
       "error",
       "always"
     ]
+
   },
   overrides: [
     {

@@ -6,7 +6,7 @@ const invoicesBaseUrl = "/oreon-invoices/invoices-incoming";
 const responseInterceptor = ((response: AxiosResponse) => response.data);
 
 const axiosInstance = axios.create({
-  baseURL: process.env.VUE_APP_BASE_URL
+  baseURL: process.env.VUE_APP_API_BASE_URL
 });
 
 axiosInstance.interceptors.response.use(responseInterceptor);

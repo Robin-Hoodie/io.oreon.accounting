@@ -8,8 +8,7 @@
     "strict": true,
     "target": "esnext",
     "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "typeRoots": ["./types", "../../node_modules/@types"]
+    "esModuleInterop": true
   },
   "include": [
     "src/**/*"

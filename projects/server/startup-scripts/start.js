@@ -14,7 +14,7 @@ const start = async () => {
         prefixColor: "cyan"
       },
       {
-        command: "netlify dev",
+        command: "NODE_ENV=development netlify dev",
         name: "functions",
         prefixColor: "red"
       }

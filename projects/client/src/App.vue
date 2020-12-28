@@ -5,12 +5,18 @@
 </template>
 
 <script lang="ts">
+import { provide } from "vue";
 import TheContainer from "@/components/TheContainer.vue";
+import { DefaultApolloClient } from "@vue/apollo-composable";
+import { getDefaultApolloClient } from "@/apollo";
 
 export default {
   name: "App",
   components: {
     TheContainer
+  },
+  setup (): void {
+    provide(DefaultApolloClient, getDefaultApolloClient());
   }
 };
 </script>

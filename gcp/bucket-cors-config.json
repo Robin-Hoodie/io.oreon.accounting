@@ -1,0 +1,7 @@
+[
+  {
+    "origin": ["http://localhost:8081"],
+    "method": ["PUT"],
+    "responseHeader": ["content-type"]
+  }
+]
